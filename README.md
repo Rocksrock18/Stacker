@@ -24,7 +24,7 @@ There is a shop that lets you purchase skins for your rectangle with in-game cur
 The game automatically saves your progress after every action you do.
 When you launch the game, it will load your current game state, meaning it won't reset by terminating the program.
 
-* **Note**- The save state is loaded by a file called saveState.txt. Deleting this file will cause the game to crash.
+* **Note**: The save state is loaded by a file called saveState.txt. Deleting this file will cause the game to crash.
 
 ## Built With
 
