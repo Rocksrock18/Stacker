@@ -1,2 +1,2 @@
 # Stacker
-Plays arcade like stacker game.
+Plays an arcade-like stacker game.
