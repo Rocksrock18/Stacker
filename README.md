@@ -26,6 +26,10 @@ When you launch the game, it will load your current game state, meaning it won't
 
 * **Note**: The save state is loaded by a file called saveState.txt. Deleting this file will cause the game to crash.
 
+#### Deleting your progress
+
+You can reset your progress at any time by selecting the "Delete current save state" option in the main menu.
+
 ## Built With
 
 Java
