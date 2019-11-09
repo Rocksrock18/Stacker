@@ -8,7 +8,7 @@ public class Terminator {
 	
 	public void setEndGame(boolean b)
 	{
-		//endGame = b;
+		endGame = b;
 	}
 	
 
