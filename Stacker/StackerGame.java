@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Responsible for handling all game interactions.
+ *
+ */
 public class StackerGame extends JPanel{
 	GameView frame;
 	int layer;
@@ -28,6 +32,16 @@ public class StackerGame extends JPanel{
     	end = end1;
     	rect = new ArrayList<JLabel>();
         
+    }
+    /**
+     * Pauses game for a given number of milliseconds.
+     * @param milliseconds
+     * 		The amount of milliseconds to be paused for.
+     */
+    private void Pause(int milliseconds)
+    {
+    	long currentTime = System.currentTimeMillis();
+    	while(System.currentTimeMillis()-currentTime < milliseconds);
     }
     /**
      * Plays a full game of stacker.
@@ -63,13 +77,9 @@ public class StackerGame extends JPanel{
     	addKeyListener(kl);
     	
     	frame.setStart(false);
-    	
-    	long currentTime = System.currentTimeMillis();
     	long startTime = System.currentTimeMillis();
-    	//plays until game is over
     	while(!end.endGame)
     	{
-    		//listener detecting enter key being pressed
     		if(kl.enter)
     		{
     			//ensures this is the first time [enter] was pressed,
@@ -79,10 +89,8 @@ public class StackerGame extends JPanel{
     				first = false;
     				System.out.println(xpos);
     				layer+=1;
-    				currentTime = System.currentTimeMillis();
-    				//1 second pause
-    				while(System.currentTimeMillis()-currentTime < 1000);
-    				//if layer == 14, it has reached the top
+    				Pause(1000);
+    				//layer 14 is the top of the stack
         			if(layer != 14)
         			{
             			JLabel lbl = new JLabel(new ImageIcon(this.getClass().getResource(image)));
@@ -102,8 +110,7 @@ public class StackerGame extends JPanel{
             			if(maxWidth <= 0)
             			{
             				System.out.println("YOU LOSE");
-            				currentTime = System.currentTimeMillis();
-            				while(System.currentTimeMillis()-currentTime < 1000);
+            				Pause(1000);
             				frame.returnToMainMenu();
             				
             				//ends game
@@ -112,26 +119,17 @@ public class StackerGame extends JPanel{
             			//update game state
             			lbl.setBounds(xpos, (600-layer*40), maxWidth, 40);
             			lbl.setBackground(Color.BLACK);
-            			remove(temp);
-            			rect.remove(rect.size()-1);
+            			RemoveRect(temp);
             			
-            			add(lbl);
-            			rect.add(lbl);
-            			validate();
-            			repaint();
+            			AddRect(lbl);
             			//adds next rectangle
             			System.out.println(xpos + " " + maxWidth + " " + layer);
-            			currentTime = System.currentTimeMillis();
-        				while(System.currentTimeMillis()-currentTime < 1000);
-        				add(temp);
-        				rect.add(temp);
-        				validate();
-            			repaint();
+            			Pause(1000);
+            			AddRect(temp);
         			}
         			else
         			{
-        				remove(temp);
-        				rect.remove(rect.size()-1);
+        				RemoveRect(temp);
         				JLabel lbl = new JLabel(new ImageIcon(this.getClass().getResource(image)));
             			lbl.setOpaque(true);
             			//trims rectangle as necessary
@@ -149,8 +147,7 @@ public class StackerGame extends JPanel{
             			if(maxWidth <= 0)
             			{
             				System.out.println("YOU LOSE");
-            				currentTime = System.currentTimeMillis();
-            				while(System.currentTimeMillis()-currentTime < 1000);
+            				Pause(1000);
             				frame.returnToMainMenu();
             				
             				break;
@@ -159,15 +156,11 @@ public class StackerGame extends JPanel{
             			lbl.setBounds(xpos, (600-layer*40), maxWidth, 40);
             			lbl.setBackground(Color.BLACK);
             			
-            			add(lbl);
-            			rect.add(lbl);
-            			validate();
-            			repaint();
+            			AddRect(lbl);
             			//if you've reached this point, you win
             			layer+=1;
         				System.out.println("YOU WIN");
-        				currentTime = System.currentTimeMillis();
-        				while(System.currentTimeMillis()-currentTime < 1000);
+        				Pause(1000);
         				frame.returnToMainMenu();
         				
         				break;
@@ -209,8 +202,7 @@ public class StackerGame extends JPanel{
     				}
     			}
     			temp.setBounds(xpos, (600-(layer+1)*40), maxWidth, 40);
-    			validate();
-    			repaint();
+    			Refresh();
     		}
     		//needed to ensure listener detection
     		System.out.print("");
@@ -232,11 +224,10 @@ public class StackerGame extends JPanel{
 			remove(rect.get(i));
 			rect.remove(i);
 		}
-    	validate();
-    	repaint();
+    	Refresh();
     }
     /**
-     * 
+     * Sets images of rectangles.
      * @param img
      * 		The new image of the rectangle
      * @param fadedImg
@@ -246,6 +237,37 @@ public class StackerGame extends JPanel{
     {
     	image = img;
     	fadedImage = fadedImg;
+    }
+    
+    /**
+     * Refreshes the screen.
+     */
+    private void Refresh()
+    {
+    	validate();
+    	repaint();
+    }
+    
+    /**
+     * Adds rectangle to the screen.
+     * @param lbl
+     * 		The rectangle to be added.
+     */
+    private void AddRect(JLabel lbl)
+    {
+    	add(lbl);
+    	rect.add(lbl);
+    	Refresh();
+    }
+    /**
+     * Removes rectangle from screen.
+     * @param lbl
+     * 		The rectangle to be removed.
+     */
+    private void RemoveRect(JLabel lbl)
+    {
+    	remove(lbl);
+		rect.remove(rect.size()-1);
     }
 
     
