@@ -1,4 +1,7 @@
-
+/**
+ * Responsible for tracking status of the game.
+ *
+ */
 public class Terminator {
 	boolean endGame;
 	public Terminator()
