@@ -18,7 +18,9 @@ import java.awt.Rectangle;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -36,6 +38,10 @@ import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.JButton;
 
+/**
+ * Responsible for setting up all visuals, including user options.
+ *
+ */
 public class GameView extends JFrame implements java.io.Serializable {
 
 	private JLayeredPane contentPane;
@@ -47,7 +53,6 @@ public class GameView extends JFrame implements java.io.Serializable {
 	private String currentScreen;
 	private int money;
 	private boolean started;
-	private boolean ended;
 	private HashMap<String, Integer> saveState;
 	String fileName;
 	ImageIcon[] optionImages;
@@ -77,7 +82,6 @@ public class GameView extends JFrame implements java.io.Serializable {
 		//initialize options based on save state
 		currentScreen = "Menu";
 		started = false;
-		ended = false;
 		rect = new ArrayList<JLabel>();
 		rect.add(new JLabel(""));
 		rect.remove(0);
@@ -108,14 +112,7 @@ public class GameView extends JFrame implements java.io.Serializable {
 		
 		optionOwned = new boolean[2];
 		optionOwned[0] = true;
-		if(saveState.get("Option2Owned") == 1)
-		{
-			optionOwned[1] = true;
-		}
-		else
-		{
-			optionOwned[1] = false;
-		}
+		optionOwned[1] = saveState.get("Option2Owned") == 1;
 		
 		
 		currentStoreOption = 0;
@@ -173,7 +170,11 @@ public class GameView extends JFrame implements java.io.Serializable {
 		
 		//displays info
 		JTextPane txtpnInTheGame = new JTextPane();
-		txtpnInTheGame.setText("In Stacker, the objective is to stack blocks on top of each other until you reach the top. Press the [enter] key to stop the moving rectangle. If any part of the rectangle is hanging off the edge, it will be cut off. The game is over once the rectangle misses the stack. Good Luck!");
+		txtpnInTheGame.setText("In Stacker, the objective is to stack blocks "
+				+ "on top of each other until you reach the top. Press the [enter] "
+				+ "key to stop the moving rectangle. If any part of the rectangle is "
+				+ "hanging off the edge, it will be cut off. The game is over once the "
+				+ "rectangle misses the stack. Good Luck!");
 		txtpnInTheGame.setFont(new Font("Sylfaen", Font.ITALIC, 24));
 		txtpnInTheGame.setForeground(Color.WHITE);
 		txtpnInTheGame.setBackground(Color.BLACK);
@@ -639,7 +640,7 @@ public class GameView extends JFrame implements java.io.Serializable {
 		currentScreen = "Menu";
 	}
 	/**
-	 * Adds money to coin total.
+	 * Adds money to coin total and refreshes display.
 	 * @param amount
 	 * 		Amount of currency to be added
 	 */
@@ -684,13 +685,39 @@ public class GameView extends JFrame implements java.io.Serializable {
 			file.close();
 			System.out.println("Loaded successfully!");
 		}
+		catch(FileNotFoundException ex)
+		{
+			System.out.println("Save state not found. Recreating...");
+			CreateSaveState();
+			InitializeSaveState();
+		}
 		catch(IOException ex)
 		{
-			System.out.println("Failure to load.");
+			System.out.println("Failed to load. Reinitializing save state...");
+			InitializeSaveState();
 		}
 		catch(ClassNotFoundException ex)
 		{
 			System.out.println("Failure to load.");
 		}
+	}
+	/**
+	 * Initializes all default key value pairs for the save state.
+	 */
+	private void InitializeSaveState()
+	{
+		saveState.put("Money", 0);
+		saveState.put("Option2Owned", 0);
+		saveState.put("OptionSelected", 0);
+		save();
+	}
+	/**
+	 * Creates files necessary for save state.
+	 */
+	private void CreateSaveState()
+	{
+		File target = new File(fileName);
+		File parent = target.getParentFile();
+		parent.mkdirs();
 	}
 }
