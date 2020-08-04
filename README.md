@@ -2,6 +2,12 @@
 
 Plays an arcade-like stacker game.
 
+## Getting Started
+
+Download the jar file to play the game. A save state will be created in the same location to keep track of your progress.
+
+* **Note:** You'll need the latest version of java to run the file. 
+
 ## Game Objective
 
 Your goal is to stack rectangles on top of each other in order to reach the top of the screen.
@@ -24,7 +30,7 @@ There is a shop that lets you purchase skins for your rectangle with in-game cur
 The game automatically saves your progress after every action you do.
 When you launch the game, it will load your current game state, meaning it won't reset by terminating the program.
 
-* **Note**: The save state is loaded by a file called saveState.txt. Deleting this file will cause the game to crash.
+* **Note**: The save state is loaded by a file called saveState.txt. Deleting this file will cause your save state to be reset.
 
 #### Deleting your progress
 
